@@ -11,4 +11,6 @@ return array(
     //默认时区
     'DEFAULT_TIME_ZONE'=>'PRC',
     'SESSION_AUTO_START'=>true,
+    'VAR_ACTION'=>'a',
+    'VAR_CONTROLLER'=>'c'
 );

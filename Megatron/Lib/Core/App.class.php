@@ -5,7 +5,7 @@
  * Date: 2017/6/14
  * Time: 下午3:11
  */
-namespace App;
+namespace Core;
 
 final class App
 {
@@ -13,6 +13,9 @@ final class App
     {
         self::init();
         self::setUrl();
+        spl_autoload_register(array(__CLASS__, 'autoLoad'));
+        self::createDemo();
+        self::appRun();
     }
 
     /**
@@ -50,5 +53,49 @@ str;
         define('__ROOT__', dirname(__APP__));
         define('__TPL__', __ROOT__ . '/' . APP_NAME . '/Tpl');
         define('__PUBLIC__', __TPL__ . '/Public');
+    }
+
+    /**
+     * 自动加载
+     * @param $className
+     */
+    private static function autoLoad($className)
+    {
+        include APP_CONTROLLER_PATH.'/'.$className.'.class.php';
+    }
+
+    /**
+     * 创建用户默认文件
+     */
+    private static function createDemo()
+    {
+        $path = APP_CONTROLLER_PATH.'/IndexController.class.php';
+
+        $str = <<<str
+<?php
+use Core\Controller;
+
+class IndexController extends Controller{
+    public function index(){
+        header('Content-type:text/html;charset=utf-8');
+        echo '<h1> (: 欢迎使用Megatron框架!</h1>';
+    }
+}
+?>
+str;
+        is_file($path) || file_put_contents($path, $str);
+    }
+
+    /**
+     * 加载默认控制器
+     */
+    private static function appRun()
+    {
+        $c = isset($_GET[C('VAR_CONTROLLER')]) ? $_GET[C('VAR_CONTROLLER')] : 'Index';
+        $a = isset($_GET[C('VAR_ACTION')]) ? $_GET[C('VAR_ACTION')] : 'index';
+        $c .= 'Controller';
+
+        $obj = new $c();
+        $obj->$a();
     }
 }
