@@ -6,4 +6,6 @@
  * Time: 下午1:48
  */
 define('APP_NAME', 'Index');
+define('DEBUG', true);
+
 require "./Megatron/Megatron.php";

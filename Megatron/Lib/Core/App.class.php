@@ -78,7 +78,7 @@ use Core\Controller;
 class IndexController extends Controller{
     public function index(){
         header('Content-type:text/html;charset=utf-8');
-        echo '<h1> (: 欢迎使用Megatron框架!</h1>';
+        echo '<h1> :) 欢迎使用Megatron框架!</h1>';
     }
 }
 ?>
@@ -93,9 +93,13 @@ str;
     {
         $c = isset($_GET[C('VAR_CONTROLLER')]) ? $_GET[C('VAR_CONTROLLER')] : 'Index';
         $a = isset($_GET[C('VAR_ACTION')]) ? $_GET[C('VAR_ACTION')] : 'index';
-        $c .= 'Controller';
 
+        define('CONTROLLER', $c);
+        define('ACTION', $a);
+
+        $c .= 'Controller';
         $obj = new $c();
         $obj->$a();
     }
 }
+?>
