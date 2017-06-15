@@ -12,6 +12,7 @@ final class App
     public static function run()
     {
         self::init();
+        self::userImport();
         self::setUrl();
         spl_autoload_register(array(__CLASS__, 'autoLoad'));
         self::createDemo();
@@ -25,6 +26,18 @@ final class App
     {
         //加载配置项
         C(include CONFIG_PATH . '/config.php');
+        //加载公共配置项
+        $commonConfPath = COMMON_CONFIG_PATH.'/config.php';
+        $commonConfStr = <<<str
+<?php
+return array(
+    //'key'=>'value'
+);
+?>
+str;
+        is_file($commonConfPath) || file_put_contents($commonConfPath, $commonConfStr);
+        C(include $commonConfPath);
+        //加载用户配置项
         $userConfPath = APP_CONFIG_PATH . '/config.php';
         $userConfStr  = <<<str
 <?php
@@ -100,6 +113,23 @@ str;
         $c .= 'Controller';
         $obj = new $c();
         $obj->$a();
+    }
+
+    /**
+     * 导入用户配置的公共文件
+     */
+    private static function userImport(){
+        $fileArr = C('AUTO_LOAD_FILE');
+        if(is_array($fileArr) && !empty($fileArr)){
+            foreach ($fileArr as $v){
+                $path = COMMON_LIB_PATH.'/'.$v;
+                if(is_file($path)){
+                    require_once COMMON_LIB_PATH.'/'.$v;
+                }else{
+                    halt('错误的配置项:'.$path.'文件不存在');
+                }
+            }
+        }
     }
 }
 ?>

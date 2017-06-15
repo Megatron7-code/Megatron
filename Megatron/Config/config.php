@@ -20,4 +20,6 @@ return array(
     'ERROR_URL'=>'',
     //错误提示信息
     'ERROR_MSG'=>'出错了啦',
+    //自动加载Common/Lib目录下的文件
+    'AUTO_LOAD_FILE'=>array()
 );
