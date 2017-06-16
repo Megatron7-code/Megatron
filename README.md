@@ -4,7 +4,7 @@ Megatron框架是一个MVC框架，包括了基本的视图，逻辑层，模型
 
 ## Megatron 目录结构
 
-* index.php 入口文件
+* index.php 项目引导文件
 * Megatron/Config 配置目录
 * Megatron/Data 系统模板文件
 * Megatron/Extends 系统扩展目录
