@@ -21,5 +21,13 @@ return array(
     //错误提示信息
     'ERROR_MSG'=>'出错了啦',
     //自动加载Common/Lib目录下的文件
-    'AUTO_LOAD_FILE'=>array()
+    'AUTO_LOAD_FILE'=>array(),
+    //数据库配置
+    'DB_CHARSET'=>'utf8',
+    'DB_HOST'=>'127.0.0.1',
+    'DB_PORT'=>3306,
+    'DB_USER'=>'root',
+    'DB_PASSWORD'=>'',
+    'DB_DATABASE'=>'',
+    'DB_PREFIX'=>''
 );

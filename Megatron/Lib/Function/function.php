@@ -96,4 +96,8 @@ function halt($error, $level = 'ERROR', $type = 3, $dest = NULL)
     include DATA_PATH.'/Tpl/halt.html';
     die;
 }
+
+function M($table){
+    return new Tool\Model($table);
+}
 ?>

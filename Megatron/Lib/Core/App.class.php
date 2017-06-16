@@ -12,6 +12,10 @@ final class App
     public static function run()
     {
         self::init();
+        //自定义错误处理
+        set_error_handler(array(__CLASS__, 'error'));
+        //致命错误捕获
+        register_shutdown_function(array(__CLASS__, 'fatalError'));
         self::userImport();
         self::setUrl();
         spl_autoload_register(array(__CLASS__, 'autoLoad'));
@@ -27,8 +31,8 @@ final class App
         //加载配置项
         C(include CONFIG_PATH . '/config.php');
         //加载公共配置项
-        $commonConfPath = COMMON_CONFIG_PATH.'/config.php';
-        $commonConfStr = <<<str
+        $commonConfPath = COMMON_CONFIG_PATH . '/config.php';
+        $commonConfStr  = <<<str
 <?php
 return array(
     //'key'=>'value'
@@ -74,7 +78,20 @@ str;
      */
     private static function autoLoad($className)
     {
-        include APP_CONTROLLER_PATH.'/'.$className.'.class.php';
+        switch (true) {
+            case strlen($className) > 10 && (substr($className, -10) == 'Controller'):
+                $path = APP_CONTROLLER_PATH . '/' . $className . '.class.php';
+                if (!is_file($path)) halt($path . '控制器未找到');
+                include $path;
+                break;
+            default:
+                //去除命名空间
+                $temp = str_replace('Tool\\', '', $className);
+                $path = TOOL_PATH . '/' . $temp . '.class.php';
+                if (!is_file($path)) halt($path . '控制器未找到');
+                include $path;
+                break;
+        }
     }
 
     /**
@@ -82,7 +99,7 @@ str;
      */
     private static function createDemo()
     {
-        $path = APP_CONTROLLER_PATH.'/IndexController.class.php';
+        $path = APP_CONTROLLER_PATH . '/IndexController.class.php';
 
         $str = <<<str
 <?php
@@ -111,23 +128,86 @@ str;
         define('ACTION', $a);
 
         $c .= 'Controller';
-        $obj = new $c();
-        $obj->$a();
+        if (class_exists($c)) {
+            $obj = new $c();
+            if (method_exists($obj, $a)) {
+                $obj->$a();
+            } else {
+                halt($c . ':' . $a . '方法不存在');
+            }
+        } else {
+            halt($c . '控制器不存在');
+        }
     }
 
     /**
      * 导入用户配置的公共文件
      */
-    private static function userImport(){
+    private static function userImport()
+    {
         $fileArr = C('AUTO_LOAD_FILE');
-        if(is_array($fileArr) && !empty($fileArr)){
-            foreach ($fileArr as $v){
-                $path = COMMON_LIB_PATH.'/'.$v;
-                if(is_file($path)){
-                    require_once COMMON_LIB_PATH.'/'.$v;
-                }else{
-                    halt('错误的配置项:'.$path.'文件不存在');
+        if (is_array($fileArr) && !empty($fileArr)) {
+            foreach ($fileArr as $v) {
+                $path = COMMON_LIB_PATH . '/' . $v;
+                if (is_file($path)) {
+                    require_once COMMON_LIB_PATH . '/' . $v;
+                } else {
+                    halt('错误的配置项:' . $path . '文件不存在');
                 }
+            }
+        }
+    }
+
+    /**
+     * 自定义错误处理
+     * @param $error
+     * @param $error
+     * @param $file
+     * @param $line
+     */
+    public static function error($errno, $error, $file, $line)
+    {
+        switch ($error) {
+            case E_ERROR:
+            case E_PARSE:
+            case E_CORE_ERROR:
+            case E_COMPILE_ERROR:
+            case E_USER_ERROR:
+            default:
+                if (DEBUG) {
+                    $e = [
+                        'message'=>$error,
+                        'file'=>$file,
+                        'line'=>$line,
+                        'class'=>CONTROLLER,
+                        'function'=>ACTION
+                    ];
+                } else {
+                    if($url = C('ERROR_URL')){
+                        go($url);
+                    }else{
+                        $e['message'] = C('ERROR_MSG');
+                    }
+                }
+        }
+        include DATA_PATH . '/Tpl/halt.html';
+        die;
+    }
+
+    /**
+     * 致命错误处理
+     */
+    public static function fatalError(){
+        if ($e = error_get_last()) {
+            switch($e['type']){
+                case E_ERROR:
+                case E_PARSE:
+                case E_CORE_ERROR:
+                case E_COMPILE_ERROR:
+                case E_USER_ERROR:
+                    ob_end_clean();
+                    halt($e);
+                    break;
             }
         }
     }
