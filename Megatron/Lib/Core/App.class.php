@@ -84,11 +84,16 @@ str;
                 if (!is_file($path)) halt($path . '控制器未找到');
                 include $path;
                 break;
+            case strlen($className) > 5 && (substr($className, -5) == 'Model'):
+                $path = COMMON_MODEL_PATH . '/' . $className . '.class.php';
+                if (!is_file($path)) halt($path . '模型未找到');
+                include $path;
+                break;
             default:
                 //去除命名空间
                 $temp = str_replace('Tool\\', '', $className);
                 $path = TOOL_PATH . '/' . $temp . '.class.php';
-                if (!is_file($path)) halt($path . '控制器未找到');
+                if (!is_file($path)) halt($path . '类未找到');
                 include $path;
                 break;
         }
@@ -176,16 +181,16 @@ str;
             default:
                 if (DEBUG) {
                     $e = [
-                        'message'=>$error,
-                        'file'=>$file,
-                        'line'=>$line,
-                        'class'=>CONTROLLER,
-                        'function'=>ACTION
+                        'message' => $error,
+                        'file' => $file,
+                        'line' => $line,
+                        'class' => CONTROLLER,
+                        'function' => ACTION
                     ];
                 } else {
-                    if($url = C('ERROR_URL')){
+                    if ($url = C('ERROR_URL')) {
                         go($url);
-                    }else{
+                    } else {
                         $e['message'] = C('ERROR_MSG');
                     }
                 }
@@ -197,9 +202,10 @@ str;
     /**
      * 致命错误处理
      */
-    public static function fatalError(){
+    public static function fatalError()
+    {
         if ($e = error_get_last()) {
-            switch($e['type']){
+            switch ($e['type']) {
                 case E_ERROR:
                 case E_PARSE:
                 case E_CORE_ERROR:
@@ -212,4 +218,5 @@ str;
         }
     }
 }
+
 ?>

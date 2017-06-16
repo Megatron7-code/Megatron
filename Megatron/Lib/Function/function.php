@@ -16,7 +16,8 @@ function p($arr)
     }
 }
 
-function print_const(){
+function print_const()
+{
     $const = get_defined_constants(true);
     p($const['user']);
 }
@@ -58,7 +59,7 @@ function C($var = NUll, $value = NUll)
         return isset($config[$var]) ? $config[$var] : NULL;
     }
 
-    if(is_null($var) && is_null($value)){
+    if (is_null($var) && is_null($value)) {
         return $config;
     }
 }
@@ -71,33 +72,35 @@ function halt($error, $level = 'ERROR', $type = 3, $dest = NULL)
         Core\Log::write($error, $level, $type, $dest);
     }
     $e = [];
-    if(DEBUG){
-        if(!is_array($error)){
-            $trace = debug_backtrace();
-            $e['message'] = $error;
-            $e['file'] = $trace[0]['file'];
-            $e['line'] = $trace[0]['line'];
-            $e['class'] = isset($trace[0]['class']) ? $trace[0]['class'] : '';
+    if (DEBUG) {
+        if (!is_array($error)) {
+            $trace         = debug_backtrace();
+            $e['message']  = $error;
+            $e['file']     = $trace[0]['file'];
+            $e['line']     = $trace[0]['line'];
+            $e['class']    = isset($trace[0]['class']) ? $trace[0]['class'] : '';
             $e['function'] = isset($trace[0]['function']) ? $trace[0]['function'] : '';
             ob_start();
             debug_print_backtrace();
             $e['trace'] = htmlspecialchars(ob_get_clean());
-        }else{
+        } else {
             $e = $error;
         }
-    }else{
-        if($url = C('ERROR_URL')){
+    } else {
+        if ($url = C('ERROR_URL')) {
             go($url);
-        }else{
+        } else {
             $e['message'] = C('ERROR_MSG');
         }
     }
 
-    include DATA_PATH.'/Tpl/halt.html';
+    include DATA_PATH . '/Tpl/halt.html';
     die;
 }
 
-function M($table){
-    return new Tool\Model($table);
+function M($table)
+{
+    return new Core\Model($table);
 }
+
 ?>

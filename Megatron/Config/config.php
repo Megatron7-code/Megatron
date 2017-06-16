@@ -29,5 +29,11 @@ return array(
     'DB_USER'=>'root',
     'DB_PASSWORD'=>'',
     'DB_DATABASE'=>'',
-    'DB_PREFIX'=>''
+    'DB_PREFIX'=>'',
+    //view配置
+    'VIEW_ON'=>false,
+    'LEFT_DELIMITER'=>'{',
+    'RIGHT_DELIMITER'=>'}',
+    'CACHE_ON'=>false,
+    'CACHE_TIME'=>60
 );
