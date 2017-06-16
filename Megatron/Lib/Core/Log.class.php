@@ -9,6 +9,13 @@ namespace Core;
 
 class Log
 {
+    /**
+     * 日志记录
+     * @param $msg
+     * @param string $level
+     * @param int $type
+     * @param null $dest
+     */
     public static function write($msg, $level = 'ERROR', $type = 3, $dest = NULL)
     {
         if (!C('SAVE_LOG')) return;

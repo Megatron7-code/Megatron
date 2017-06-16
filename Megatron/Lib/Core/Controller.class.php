@@ -19,6 +19,12 @@ class Controller extends View
         }
     }
 
+    /**
+     * 成功跳转
+     * @param $msg
+     * @param null $url
+     * @param int $time
+     */
     protected function success($msg, $url = NULL, $time = 3)
     {
         if (strpos('http://', $url) === false) {
@@ -27,6 +33,12 @@ class Controller extends View
         include APP_TPL_PATH . '/success.html';
     }
 
+    /**
+     * 错误跳转
+     * @param $msg
+     * @param null $url
+     * @param int $time
+     */
     protected function error($msg, $url = NULL, $time = 3)
     {
         if (strpos('http://', $url) === false) {
@@ -35,6 +47,10 @@ class Controller extends View
         include APP_TPL_PATH . '/error.html';
     }
 
+    /**
+     * 获取模板
+     * @return string
+     */
     protected function getTpl()
     {
         if (empty($tpl)) {
@@ -47,6 +63,10 @@ class Controller extends View
         return $path;
     }
 
+    /**
+     * 绑定模板
+     * @param null $tpl
+     */
     protected function display($tpl = NULL)
     {
         $path = $this->getTpl();
@@ -59,6 +79,11 @@ class Controller extends View
         }
     }
 
+    /**
+     * 绑定变量
+     * @param $var
+     * @param $value
+     */
     protected function assign($var, $value)
     {
         if (C('VIEW_ON')) {

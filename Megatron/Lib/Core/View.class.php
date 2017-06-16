@@ -31,16 +31,30 @@ class View
         self::$view             = $smarty;
     }
 
+    /**
+     * 绑定模板
+     * @param $tpl
+     */
     protected function display($tpl)
     {
         self::$view->display($tpl, $_SERVER['REQUEST_URI']);
     }
 
+    /**
+     * 模板赋值
+     * @param $var
+     * @param $value
+     */
     protected function assign($var, $value)
     {
         self::$view->assign($var, $value);
     }
 
+    /**
+     * 是否开启缓存
+     * @param null $tpl
+     * @return mixed
+     */
     protected function isCache($tpl = NULL)
     {
         if (!C('VIEW_ON')) halt('请先开启view');

@@ -5,6 +5,10 @@
  * Date: 2017/6/14
  * Time: 下午3:09
  */
+/**
+ * 打印
+ * @param $arr
+ */
 function p($arr)
 {
     if (is_bool($arr)) {
@@ -16,12 +20,21 @@ function p($arr)
     }
 }
 
+/**
+ * 用户常量打印
+ */
 function print_const()
 {
     $const = get_defined_constants(true);
     p($const['user']);
 }
 
+/**
+ * 路由跳转
+ * @param $url
+ * @param int $time
+ * @param string $msg
+ */
 function go($url, $time = 0, $msg = '')
 {
     if (!headers_sent()) {
@@ -64,6 +77,13 @@ function C($var = NUll, $value = NUll)
     }
 }
 
+/**
+ * 错误页面
+ * @param $error
+ * @param string $level
+ * @param int $type
+ * @param null $dest
+ */
 function halt($error, $level = 'ERROR', $type = 3, $dest = NULL)
 {
     if (is_array($error)) {
@@ -98,6 +118,11 @@ function halt($error, $level = 'ERROR', $type = 3, $dest = NULL)
     die;
 }
 
+/**
+ * 实例化模型
+ * @param $table
+ * @return \Core\Model
+ */
 function M($table)
 {
     return new Core\Model($table);

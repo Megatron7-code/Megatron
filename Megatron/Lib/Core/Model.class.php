@@ -33,6 +33,9 @@ class Model
         }
     }
 
+    /**
+     * 连接数据库
+     */
     private function connect()
     {
         if (is_null(self::$link)) {
@@ -43,6 +46,10 @@ class Model
         }
     }
 
+    /**
+     * 获取表名
+     * @return null|string
+     */
     public function getTableName()
     {
         if (empty($this->table)) {
@@ -104,6 +111,11 @@ class Model
         return $this;
     }
 
+    /**
+     * 查询
+     * @param $sql
+     * @return array
+     */
     public function query($sql)
     {
         self::$sqls[] = $sql;
@@ -130,6 +142,11 @@ class Model
         return current($data);
     }
 
+    /**
+     * sql执行
+     * @param $sql
+     * @return mixed
+     */
     public function execute($sql)
     {
         self::$sqls[] = $sql;
@@ -146,6 +163,10 @@ class Model
         }
     }
 
+    /**
+     * 删除
+     * @return mixed
+     */
     public function delete()
     {
         if (empty($this->opt['where'])) halt('请使用where条件');
@@ -153,6 +174,11 @@ class Model
         return $this->execute($sql);
     }
 
+    /**
+     * 插入
+     * @param $data
+     * @return mixed
+     */
     public function insert($data)
     {
         if (is_null($data)) $data = $_POST;
@@ -169,6 +195,11 @@ class Model
         return $this->execute($sql);
     }
 
+    /**
+     * 更新
+     * @param $data
+     * @return mixed
+     */
     public function update($data)
     {
         if (empty($this->opt['where'])) halt('请使用where条件');
@@ -182,6 +213,11 @@ class Model
         return $this->execute($sql);
     }
 
+    /**
+     * 用户输入过滤
+     * @param $str
+     * @return mixed
+     */
     private function safeStr($str)
     {
         if (get_magic_quotes_gpc()) {
